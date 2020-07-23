@@ -51,7 +51,7 @@ const generateMeta = release => {
     assets: release.assets.map(({name}) => ({
       name,
       platform: platformFromName(name),
-      url: `https://github.com/ralley/ralley-cli/releases/download/${release.tag_name}/${name}`
+      url: `https://github.com/ralleyio/ralley-cli/releases/download/${release.tag_name}/${name}`
     }))
   }
 }
