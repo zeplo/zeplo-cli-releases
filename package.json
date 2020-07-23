@@ -1,0 +1,27 @@
+{
+  "name": "@ralley/ralley-cli-releases",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "start": "micro -p $PORT",
+    "dev": "micro-dev",
+    "test": "xo"
+  },
+  "xo": {
+    "esnext": true,
+    "space": true,
+    "semicolon": false,
+    "rules": {
+      "camelcase": 0
+    }
+  },
+  "dependencies": {
+    "micro": "9.1.0",
+    "ms": "2.1.1",
+    "node-fetch": "2.0.0"
+  },
+  "devDependencies": {
+    "micro-dev": "2.2.0",
+    "xo": "0.20.3"
+  }
+}
