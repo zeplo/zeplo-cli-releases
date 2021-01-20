@@ -51,14 +51,14 @@ const generateMeta = release => {
     assets: release.assets.map(({name}) => ({
       name,
       platform: platformFromName(name),
-      url: `https://github.com/ralleyio/ralley-cli/releases/download/${release.tag_name}/${name}`
+      url: `https://github.com/zeplo/zeplo-cli/releases/download/${release.tag_name}/${name}`
     }))
   }
 }
 
 const cacheData = async () => {
   const start = Date.now()
-  const url = 'https://api.github.com/repos/ralleyio/ralley-cli/releases?per_page=100'
+  const url = 'https://api.github.com/repos/zeplo/zeplo-cli/releases?per_page=100'
 
   const response = await fetch(url, {
     headers: {

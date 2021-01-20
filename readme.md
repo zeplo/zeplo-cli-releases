@@ -1,6 +1,6 @@
-# ralley-cli-releases
+# zeplo-cli-releases
 
-Microservice for caching and exposing the latest stable and canary release of [Zeplo CLI](https://github.com/ralleyio/ralley-cli).
+Microservice for caching and exposing the latest stable and canary release of [Zeplo CLI](https://github.com/zeplo/zeplo-cli).
 
 ## Usage
 
