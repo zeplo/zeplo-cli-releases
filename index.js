@@ -1,22 +1,21 @@
 // Packages
-const fetch = require('node-fetch')
+const axios = require('axios')
 const ms = require('ms')
 
 // This is where we're keeping the cached
 // releases in the RAM
-const cache = {}
+let cache = null
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET')
 
-  return cache
+  return getData()
 }
 
 const slack = (text, id) => {
-  fetch(`https://hooks.slack.com/services/${id}`, {
-    method: 'POST',
-    body: JSON.stringify({text})
+  axios.post(`https://hooks.slack.com/services/${id}`, {
+    text,
   })
 }
 
@@ -56,31 +55,21 @@ const generateMeta = release => {
   }
 }
 
-const cacheData = async () => {
-  const start = Date.now()
+const getData = async () => {
+  if (cache) return cache
+
   const url = 'https://api.github.com/repos/zeplo/zeplo-cli/releases?per_page=100'
 
-  const response = await fetch(url, {
+  const response = await axios.get(url, {
     headers: {
       Accept: 'application/vnd.github.preview'
     }
   })
 
-  if (response.status !== 200) {
-    return logError('Non-200 response code from GitHub: ' + response.status)
-  }
-
-  let releases
-
-  try {
-    releases = await response.json()
-  } catch (err) {
-    logError('Error parsing response from GitHub: ' + err.stack)
-    return
-  }
-
+  const releases = response.data
   const canary = releases.find(item => Boolean(item.prerelease))
   const stable = releases.find(item => !item.prerelease)
+  cache = {}
 
   if (canary && isCanary(canary)) {
     cache.canary = generateMeta(canary)
@@ -90,12 +79,9 @@ const cacheData = async () => {
     cache.stable = generateMeta(stable)
   }
 
-  log(`Re-built Now CLI releases cache. ` +
-  `Elapsed: ${(new Date() - start)}ms`)
+  setTimeout(() => {
+    cache = null
+  }, ms('5m'))
+
+  return cache
 }
-
-// Cache releases now
-cacheData()
-
-// ... and every 5 minutes
-setInterval(cacheData, ms('5m'))
